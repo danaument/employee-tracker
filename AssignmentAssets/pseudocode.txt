@@ -1,0 +1,38 @@
+lots of steps
+
+load dependencies
+create db schema in workbench
+create start.js
+create list of functions
+user input tree
+
+
+
+
+
+user input tree
+    start with fresh db
+    start with seed db
+
+    then 
+    view all employees
+    view all employees by manager
+    view all employees by department
+    add employee
+    add department
+    add role
+    update employee role
+    update employee manager
+    view departments
+    view roles
+    remove employee
+    remove role
+    remove 
+
+    add departments, roles, employees
+        which?
+    view departments, roles, employees
+    update employee roles
+    update employee managers
+    delete departments, roles, employees
+    view total salary of a department
