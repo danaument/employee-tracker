@@ -36,3 +36,9 @@ user input tree
     update employee managers
     delete departments, roles, employees
     view total salary of a department
+
+
+
+Questions - 
+    how to handle async/promises
+    how to get count of people with role on inner join

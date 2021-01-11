@@ -27,12 +27,13 @@ function start() {
       message: "What would you like to do?",
       choices: ["View Employees", "Exit"],
     }])
-    .then(function (answer) {
+    .then(async function (answer) {
       // based on their answer, either call the bid or the post functions
       switch (answer.menu) {
         case "View Employees":
           console.log("running view employees query")
-          queries.viewEmployees(connection, "employee");
+          let results = await queries.viewEmployees(connection, "employee");
+          console.log(results);
           start();
           break;
 
