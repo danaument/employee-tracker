@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
     password: "tester"
 });
 
-con.connect(function(err) {
+connection.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
   connection.query("CREATE DATABASE employee_tracker_db", function (err, result) {
