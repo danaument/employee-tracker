@@ -103,7 +103,10 @@ VALUES
 ("Henry", "Aument", 4, 1),
 ("Temperance", "Brennan", 8, NULL),
 ("Samantha", "Parkington", 9, 5),
-("Bruce", "Banner", 10, 7);`
+("Bruce", "Banner", 10, 7);`, function(error, results, fields){
+    if (error) throw error;
+    console.log("Employee_tracker_db has been recreated with seed values for demo.");
+}
     )
 }
 
