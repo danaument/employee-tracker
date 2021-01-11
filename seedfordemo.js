@@ -13,7 +13,9 @@ var connection = mysql.createConnection({
   
     // Your password
     password: "tester",
-    database: "employee_tracker_db"
+    database: "employee_tracker_db",
+
+    multipleStatements: true
 });
   
 
