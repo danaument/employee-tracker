@@ -4,6 +4,7 @@ const cTable = require('console.table');
 const queries = require("./lib/queries");
 const [
     VIEW_ALL_EMPLOYEES,
+    VIEW_ALL_EMPLOYEES_ALL_DATA,
     VIEW_ALL_DEPARTMENTS,
     VIEW_ALL_ROLES,
     ADD_EMPLOYEE,
@@ -46,13 +47,12 @@ function start() {
       name: "menu",
       type: "list",
       message: "What would you like to do?",
-      choices: [VIEW_ALL_EMPLOYEES, VIEW_ALL_DEPARTMENTS, VIEW_ALL_ROLES, ADD_EMPLOYEE, ADD_ROLE, ADD_DEPARTMENT, UPDATE_ROLE, "Exit"],
+      choices: [VIEW_ALL_EMPLOYEES, VIEW_ALL_DEPARTMENTS, VIEW_ALL_ROLES, ADD_EMPLOYEE, ADD_ROLE, ADD_DEPARTMENT, UPDATE_ROLE, VIEW_ALL_EMPLOYEES_ALL_DATA, "Exit"],
     }])
     .then(async function (answer) {
       // based on their answer, either call the bid or the post functions
       switch (answer.menu) {
         case VIEW_ALL_EMPLOYEES:
-          console.log("running view employees query")
           results = await queries.viewEmployees("employee");
           console.table(results);
           start();
@@ -78,6 +78,11 @@ function start() {
           break;
         case UPDATE_ROLE:
           updateRole();
+          break;
+        case VIEW_ALL_EMPLOYEES_ALL_DATA:
+          results = await queries.viewEmployeesAllData();
+          console.table(results);
+          start();
           break;
         default:
           console.log("Goodbye!");
