@@ -12,11 +12,14 @@ const [
     EMPLOYEE_LAST,
     EMPLOYEE_FIRST,
     EMPLOYEE_ROLE,
+    EMPLOYEE_NEW_ROLE,
     EMPLOYEE_MANAGER,
     DEPARTMENT_NAME,
     ROLE_TITLE,
     ROLE_SALARY,
-    ROLE_DEPARTMENT
+    ROLE_DEPARTMENT,
+    UPDATE_ROLE,
+    WHICH_EMPLOYEE
 ] = require("./lib/const");
 const { add } = require("lodash");
 
@@ -43,7 +46,7 @@ function start() {
       name: "menu",
       type: "list",
       message: "What would you like to do?",
-      choices: [VIEW_ALL_EMPLOYEES, VIEW_ALL_DEPARTMENTS, VIEW_ALL_ROLES, ADD_EMPLOYEE, "Exit"],
+      choices: [VIEW_ALL_EMPLOYEES, VIEW_ALL_DEPARTMENTS, VIEW_ALL_ROLES, ADD_EMPLOYEE, ADD_ROLE, ADD_DEPARTMENT, UPDATE_ROLE, "Exit"],
     }])
     .then(async function (answer) {
       // based on their answer, either call the bid or the post functions
@@ -69,6 +72,12 @@ function start() {
           break;
         case ADD_ROLE:
           addNewRole();
+          break;
+        case ADD_DEPARTMENT:
+          addNewDept();
+          break;
+        case UPDATE_ROLE:
+          updateRole();
           break;
         default:
           console.log("Goodbye!");
@@ -127,9 +136,6 @@ async function addNewEmployee() {
             message: EMPLOYEE_MANAGER,
             choices: employeeList,
             filter: function (val) {
-                // console.log(val);
-                console.log(employeeList.indexOf("Daniel Aument"));
-                // console.log(idNameArray.indexOf(val));
                 return (1 + employeeList.indexOf(val));
             }
         }, {
@@ -152,7 +158,8 @@ async function addNewEmployee() {
 async function addNewRole() {
     let idDeptArray = await queries.viewDepartments();
     let deptList = [];
-    idDeptArray.forEach(element => deptList.push(element.title));
+    idDeptArray.forEach(element => deptList.push(element.name));
+    // console.log(deptList);
     inquirer
         .prompt([{
             name: "title",
@@ -169,14 +176,14 @@ async function addNewRole() {
         }, {
             name: "salary",
             type: "input",
-            message: ROLE_TITLE,
-            filter: function (num) {
-                return parseInt(num.trim());
+            message: ROLE_SALARY,
+            filter: function (val) {
+                return parseInt(val.trim());
             },
-            validate: function (num) {
-                if (!Number.isInteger(num)) {
+            validate: function (val) {
+                if (typeof val !== "number") {
                     return "The salary must be a number.";
-                } else if (num === 0) {
+                } else if (val <= 0) {
                     return "The salary must be greater than 0, you tightwad!"
                 } else return true;
             },
@@ -193,6 +200,69 @@ async function addNewRole() {
         // based on their answer, either call the bid or the post functions
             console.log(`Adding role: ${answer.title}, ${answer.salary}, ${answer.dept_id}`)
             let results = await queries.addRole(answer.title, answer.salary, answer.dept_id);
+            start();
+        })
+}
+
+async function addNewDept() {
+    inquirer
+        .prompt([{
+            name: "name",
+            type: "input",
+            message: DEPARTMENT_NAME,
+            filter: function (name) {
+                return name.trim();
+            },
+            validate: function (name) {
+                if (name === "") {
+                    return "The name cannot be blank.";
+                } else return true;
+            },
+        }])
+        .then(async function (answer) {
+        // based on their answer, either call the bid or the post functions
+            console.log(`Adding department: ${answer.name}`)
+            let results = await queries.addDept(answer.name);
+            start();
+        })
+}
+
+async function updateRole() {
+    let idNameArray = await queries.viewEmployees("employee");
+    let employeeList = [];
+    idNameArray.forEach(element => employeeList.push(`${element.first_name} ${element.last_name}`));
+    // console.log(employeeList);
+    let idRoleArray = await queries.viewRoles();
+    let roleList = [];
+    // console.log(idRoleArray);
+    idRoleArray.forEach(element => roleList.push(element.title));
+    // console.log(roleList);
+    let employeeName;
+    let newRoleForLog
+    inquirer
+        .prompt([{
+            name: "employee",
+            type: "list",
+            message: WHICH_EMPLOYEE,
+            choices: employeeList,
+            filter: function (val) {
+                employeeName = val;
+                return (1 + employeeList.indexOf(val));
+            }
+        }, {
+            name: "role_id",
+            type: "list",
+            message: EMPLOYEE_NEW_ROLE,
+            choices: roleList,
+            filter: function (val) {
+                newRoleForLog = val;
+                return (1 + roleList.indexOf(val));
+            }
+        }])
+        .then(async function (answer) {
+        // based on their answer, either call the bid or the post functions
+            console.log(`Updating role for ${employeeName} to ${newRoleForLog}`)
+            let results = await queries.updateRole(answer.employee, answer.role_id);
             start();
         })
 }
