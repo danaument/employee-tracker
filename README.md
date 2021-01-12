@@ -31,7 +31,7 @@ node emptracker.js
 The user can follow the command line interface prompts to interact in various ways with the employees, roles, and departments in the database.
 
 ### <a name="video">Demo Video: </a>
-
+https://drive.google.com/file/d/13j12MQJpNLzQpBTxHaG9ol6LwWDvXvXF/view
 
 
 ### <a name="Notes">Notes from Dan:  </a>
